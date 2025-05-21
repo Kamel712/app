@@ -12,65 +12,25 @@ col1, col2 = st.columns([2,1])
 with col1:
     st.title("Credit Card Analysis")
 with col2:
-    st.image("credit_card_PNG123.png", width=150)  
+    st.image("credit_card_PNG123.png", width=150)
 st.sidebar.header('Navigation')
 st.sidebar.markdown("Created by [Kamel Emad](https://www.linkedin.com/in/kamel-emad/)")
 
 # Sidebar - Selection
 
-sidebar_option = st.sidebar.radio("Choose an option:",["Data Overview", "EDA", "Visualizations"])
-
-# Display the data overview:
-if sidebar_option == "Data Overview" :
-    st.header("Data Overview :")
-    st.write("This dataset provides information about credit card across different customer behavior.")
-    st.write(credit_card.head())
-
-    st.subheader("Numeric DataSet Summary :")
-    st.write("This Summary provides information about the measures of center and measures of speard for the numeric columns.")
-    numeric_cols = credit_card.select_dtypes(include='number').columns
-    for i in range(0,len(numeric_cols), 3):
-        col_pair = numeric_cols[i:i+3]  # Get three columns at a time
-        cols = st.columns(3)  # Create three side-by-side columns
-        for j, col in enumerate(col_pair):
-         with cols[j]:
-            st.write(f"Describe for: {col}")
-            st.write(credit_card[col].describe())
-            
-# Exploratory Data Analysis (EDA)
-elif sidebar_option == "EDA" :
-   st.header("Exploratory Data Analysis :")
-   st.write("One of the first things you'll want to do after you some data into a pandas DataFrame is to start exploring it." \
-   "pandas has many built in functions which allow you to quickly get information about a DataFrame." \
-   "Lets explore Education_Level Column using the credit card DataFrame :")
-   
-   # explore Education_Level Column :
-   value_counts = credit_card['Education_Level'].nunique()
-   null_count = credit_card['Education_Level'].isna().sum()
-   duplicate_count = credit_card['Education_Level'].duplicated().sum()
-   info = pd.DataFrame({
-    "Value_Count_Unique": [value_counts],
-    "Null_Count": [null_count],
-    "Duplicate_Count": [duplicate_count]})
-   st.write(info)
- 
-   st.subheader("Customer_Age Category Distribution")
-   fig,ax = plt.subplots()
-   sns.histplot(data=credit_card,x='Customer_Age', hue='Attrition_Flag', kde=True,bins=25)
-   st.pyplot(fig)
-    
-   st.subheader("Total Transaction Amount Distribution by Marital_Status")
-   fig1 = px.bar(credit_card, x='Marital_Status', y='Total_Trans_Amt', color='Marital_Status', title="Transaction Amount across Marital_Status")
-   st.plotly_chart(fig1)
-
-   st.subheader("Avg Utilization Ratio by Education_Level")
-   fig2,ax2 = plt.subplots(figsize=(8,5))
-   sns.boxplot(data=credit_card,x='Education_Level',y='Avg_Utilization_Ratio')
-   ax2.set(xlabel ="Education Level", ylabel="Avg Utilization Ratio",title ="Avg Utilization Ratio across  Education_Level")
-   st.pyplot(fig2)
+sidebar_option = st.sidebar.radio("Choose an option:",["Visualizations","Data Overview", "EDA"])
 
 # Visualizations with Interactive Widgets
-elif sidebar_option == "Visualizations" :
+if sidebar_option == "Visualizations" :
+   st.subheader("Problem Statement:")
+   st.write("A bank manager is increasingly concerned about the growing number of customers who are discontinuing the use of their credit cards." \
+   " This customer attrition is having a negative impact on both revenue and the stability of the bank’s customer base. " \
+   "To address this issue, the manager is seeking a data-driven solution to better understand the factors contributing to customer churn." \
+   " By identifying at-risk customers early, the bank can intervene with personalized services or targeted offers, " \
+   "with the ultimate goal of reducing churn rates and enhancing customer loyalty.")
+   st.subheader("Main Objective:")
+   st.write("The manager requires a clear, actionable recommendation on which customers are most likely to churn and " \
+   "what steps the bank should take to retain them through targeted interventions, personalized services, or incentive programs.")
    st.header("Interactive Visualizations")
    select_gender = st.sidebar.selectbox("Select Gender :",credit_card['Gender'].unique())
    select_marital_status = st.sidebar.selectbox("Select Marital Status :",credit_card['Marital_Status'].unique())
@@ -143,6 +103,56 @@ elif sidebar_option == "Visualizations" :
    fig8= plt.figure(figsize=(10,6))
    sns.heatmap(correlation_matrix,annot=True,cmap='Blues',linewidths=2,linecolor='r',vmin=-1,vmax=+1)
    st.pyplot(fig8)
+
+# Display the data overview:
+elif sidebar_option == "Data Overview" :
+    st.header("Data Overview :")
+    st.write("This dataset provides information about credit card across different customer behavior.")
+    st.write(credit_card.head())
+
+    st.subheader("Numeric DataSet Summary :")
+    st.write("This Summary provides information about the measures of center and measures of speard for the numeric columns.")
+    numeric_cols = credit_card.select_dtypes(include='number').columns
+    for i in range(0,len(numeric_cols), 3):
+        col_pair = numeric_cols[i:i+3]  # Get three columns at a time
+        cols = st.columns(3)  # Create three side-by-side columns
+        for j, col in enumerate(col_pair):
+         with cols[j]:
+            st.write(f"Describe for: {col}")
+            st.write(credit_card[col].describe())
+            
+# Exploratory Data Analysis (EDA)
+elif sidebar_option == "EDA" :
+   st.header("Exploratory Data Analysis :")
+   st.write("One of the first things you'll want to do after you some data into a pandas DataFrame is to start exploring it." \
+   "pandas has many built in functions which allow you to quickly get information about a DataFrame." \
+   "Lets explore Education_Level Column using the credit card DataFrame :")
+   
+   # explore Education_Level Column :
+   value_counts = credit_card['Education_Level'].nunique()
+   null_count = credit_card['Education_Level'].isna().sum()
+   duplicate_count = credit_card['Education_Level'].duplicated().sum()
+   info = pd.DataFrame({
+    "Value_Count_Unique": [value_counts],
+    "Null_Count": [null_count],
+    "Duplicate_Count": [duplicate_count]})
+   st.write(info)
+ 
+   st.subheader("Customer_Age Category Distribution")
+   fig,ax = plt.subplots()
+   sns.histplot(data=credit_card,x='Customer_Age', hue='Attrition_Flag', kde=True,bins=25)
+   st.pyplot(fig)
+    
+   st.subheader("Total Transaction Amount Distribution by Marital_Status")
+   fig1 = px.bar(credit_card, x='Marital_Status', y='Total_Trans_Amt', color='Marital_Status', title="Transaction Amount across Marital_Status")
+   st.plotly_chart(fig1)
+
+   st.subheader("Avg Utilization Ratio by Education_Level")
+   fig2,ax2 = plt.subplots(figsize=(8,5))
+   sns.boxplot(data=credit_card,x='Education_Level',y='Avg_Utilization_Ratio')
+   ax2.set(xlabel ="Education Level", ylabel="Avg Utilization Ratio",title ="Avg Utilization Ratio across  Education_Level")
+   st.pyplot(fig2)
+
 
 st.sidebar.markdown("***")
 st.sidebar.write("End of App")
