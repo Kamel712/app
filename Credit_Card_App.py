@@ -126,6 +126,11 @@ elif sidebar_option == "Visualizations" :
    st.plotly_chart(fig6)
 
    st.subheader("Relationship between Total Transaction Amount and Credit Limit :")
+   st.write("This scatter plot visualizes the relationship between Credit Limit  and Total Transaction Amount, " \
+   "segmented by customer status under the Attrition_Flag category. Two customer groups are shown: " \
+   "1- Existing Customers , 2- Attrited Customers ." \
+   "From the plot, we observe that Existing Customers generally have higher total transaction amounts, often exceeding 15,000 . " \
+   "In contrast, Attrited Customers tend to concentrate at lower transaction levels, typically below 10,000 .")
    fig7 = px.scatter(credit_card, x='Credit_Limit', y='Total_Trans_Amt',title="Sactter Plot : Total Transaction Amount VS Credit Limit",
                     labels={'Credit_Limit': 'Credit Limit','Total_Trans_Amt': 'Total Transaction Amount'},color='Attrition_Flag')
    st.plotly_chart(fig7)
